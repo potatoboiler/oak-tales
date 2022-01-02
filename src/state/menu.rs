@@ -31,7 +31,7 @@ pub enum MenuSubActions {
     Back,
 }
 
-struct ButtonFuncs {
+pub struct ButtonFuncs {
     target: MenuSubActions,
 }
 
@@ -71,67 +71,61 @@ fn construct_initial_buttons(
         ..Default::default()
     });
 
-    // change button?
-    commands
-        .spawn_bundle(ButtonBundle {
-            style: Style {
-                size: Size::new(Val::Px(150.0), Val::Px(65.0)),
-                // center button
-                margin: Rect::all(Val::Auto),
-                // horizontally center child text
-                justify_content: JustifyContent::Center,
-                // vertically center child text
-                align_items: AlignItems::Center,
+    let mut make_button = |position: Transform, message: String, action: MenuSubActions| {
+        commands
+            .spawn_bundle(ButtonBundle {
+                style: Style {
+                    size: Size::new(Val::Px(150.0), Val::Px(65.0)),
+                    margin: Rect::all(Val::Auto),
+                    justify_content: JustifyContent::Center,
+                    align_items: AlignItems::Center,
+                    ..Default::default()
+                },
+                material: button_materials.normal.clone(),
+                transform: position,
                 ..Default::default()
-            },
-            material: button_materials.normal.clone(),
-            ..Default::default()
-        })
-        .with_children(|parent| {
-            parent.spawn_bundle(TextBundle {
-                text: Text::with_section(
-                    "Button",
-                    TextStyle {
-                        font: asset_server.load("fonts/cmunss.otf"),
-                        font_size: 40.0,
-                        color: Color::rgb(0.9, 0.9, 0.9),
-                    },
-                    Default::default(),
-                ),
-                ..Default::default()
+            })
+            .with_children(|parent| {
+                parent.spawn_bundle(TextBundle {
+                    text: Text::with_section(
+                        message,
+                        TextStyle {
+                            font: asset_server.load("fonts/cmunss.otf"),
+                            font_size: 40.0,
+                            color: Color::rgb(0.9, 0.9, 0.9),
+                        },
+                        Default::default(),
+                    ),
+                    ..Default::default()
+                });
+                parent.spawn().insert(ButtonFuncs { target: action });
             });
-        });
+    };
 
-    commands
-        .spawn_bundle(ButtonBundle {
-            style: Style {
-                size: Size::new(Val::Px(10.0), Val::Px(6.0)),
-                // center button
-                margin: Rect::all(Val::Auto),
-                // horizontally center child text
-                justify_content: JustifyContent::Center,
-                // vertically center child text
-                align_items: AlignItems::Center,
-                ..Default::default()
-            },
-            material: button_materials.normal.clone(),
-            transform: Transform::from_xyz(100.0, 150.0, 75.0),
-            ..Default::default()
-        })
-        .with_children(|parent| {
-            parent.spawn_bundle(TextBundle {
-                text: Text::with_section(
-                    "Button",
-                    TextStyle {
-                        font: asset_server.load("fonts/cmunss.otf"),
-                        font_size: 10.0,
-                        color: Color::rgb(0.9, 0.9, 0.9),
-                    },
-                    Default::default(),
-                ),
-                ..Default::default()
-            });
-        });
+    // change button?
+    make_button(
+        Transform::from_xyz(100.0, 200.0, 0.0),
+        "Charsel".to_string(),
+        MenuSubActions::CharSelect,
+    );
+
+    make_button(
+        Transform::from_xyz(10.0, 150.0, 0.0),
+        "Charcreate".to_string(),
+        MenuSubActions::CharCreate,
+    );
+
+    make_button(
+        Transform::from_xyz(10.0, 150.0, 0.0),
+        "Back".to_string(),
+        MenuSubActions::Back,
+    );
+
+    make_button(
+        Transform::from_xyz(0.0, 150.0, 0.0),
+        "Rest".to_string(),
+        MenuSubActions::Exit,
+    );
 
     info!("constructed main menu!");
 }

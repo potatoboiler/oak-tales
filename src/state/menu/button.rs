@@ -1,5 +1,5 @@
+use super::MenuSubActions;
 use bevy::prelude::*;
-
 pub struct ButtonMaterials {
     pub normal: Handle<ColorMaterial>,
     pub hovered: Handle<ColorMaterial>,
@@ -17,31 +17,43 @@ impl FromWorld for ButtonMaterials {
     }
 }
 
+// we can use Const Generics to fill this with actual types instead
 pub fn button_system(
+    mut commands: Commands,
     button_materials: Res<ButtonMaterials>,
     mut interaction_query: Query<
         (&Interaction, &mut Handle<ColorMaterial>, &Children),
         (Changed<Interaction>, With<Button>),
     >,
-    mut text_query: Query<&mut Text>,
+    // mut text_query: Query<&mut Text>,
+    other_query: Query<&super::ButtonFuncs>,
 ) {
     for (interaction, mut material, children) in interaction_query.iter_mut() {
-        let mut text = text_query.get_mut(children[0]).unwrap();
+        // let mut text = text_query.get_mut(children[0]).unwrap();
+        let action = other_query.get(children[1]).unwrap();
         match *interaction {
             Interaction::Clicked => {
-                text.sections[0].value = "Press".to_string();
+                // text.sections[0].value = "Press".to_string();
                 *material = button_materials.pressed.clone();
-                info!("click");
+                match action.target {
+                    MenuSubActions::CharCreate => {
+                        info!("characreate!!");
+                    }
+                    MenuSubActions::CharSelect => {}
+                    MenuSubActions::Exit => {
+                        std::process::exit(0);
+                    }
+                    MenuSubActions::Back => {}
+                    _ => info!("click!"),
+                }
             }
             Interaction::Hovered => {
-                text.sections[0].value = "Hover".to_string();
+                // text.sections[0].value = "Hover".to_string();
                 *material = button_materials.hovered.clone();
-                info!("hover");
             }
             Interaction::None => {
-                text.sections[0].value = "Button".to_string();
+                // text.sections[0].value = "Button".to_string();
                 *material = button_materials.normal.clone();
-                info!("lol");
             }
         }
     }
