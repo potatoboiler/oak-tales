@@ -6,6 +6,7 @@ mod menu;
 #[derive(Debug, Clone, Eq, PartialEq, Hash)]
 pub enum AppState {
     MainMenu,
+    SubMenu(menu::MenuSubActions),
     InGame,
 }
 
@@ -20,8 +21,9 @@ impl Plugin for StateHandler {
 }
 
 struct Character;
+
 fn enter_game(mut app_state: ResMut<State<AppState>>, mut character: Character) {
-    app_state.set(AppState::InGame).unwrap();
+    app_state.set(AppState::InGame).unwrap()
 }
 
 fn init_cameras(mut commands: Commands) {

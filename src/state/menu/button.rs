@@ -1,9 +1,9 @@
 use bevy::prelude::*;
 
 pub struct ButtonMaterials {
-    normal: Handle<ColorMaterial>,
-    hovered: Handle<ColorMaterial>,
-    pressed: Handle<ColorMaterial>,
+    pub normal: Handle<ColorMaterial>,
+    pub hovered: Handle<ColorMaterial>,
+    pub pressed: Handle<ColorMaterial>,
 }
 
 impl FromWorld for ButtonMaterials {
@@ -17,7 +17,7 @@ impl FromWorld for ButtonMaterials {
     }
 }
 
-fn button_system(
+pub fn button_system(
     button_materials: Res<ButtonMaterials>,
     mut interaction_query: Query<
         (&Interaction, &mut Handle<ColorMaterial>, &Children),
@@ -31,14 +31,17 @@ fn button_system(
             Interaction::Clicked => {
                 text.sections[0].value = "Press".to_string();
                 *material = button_materials.pressed.clone();
+                info!("click");
             }
             Interaction::Hovered => {
                 text.sections[0].value = "Hover".to_string();
                 *material = button_materials.hovered.clone();
+                info!("hover");
             }
             Interaction::None => {
                 text.sections[0].value = "Button".to_string();
                 *material = button_materials.normal.clone();
+                info!("lol");
             }
         }
     }

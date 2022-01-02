@@ -9,6 +9,8 @@ edition = "2021"
 bevy = { version = "0.5" }
 bevy_rapier2d = "*"
 
-# Add this to your Cargo.toml
 [profile.dev.package.bevy_rapier2d]
 opt-level = 3
+
+# [profile.release]
+# debug = true
