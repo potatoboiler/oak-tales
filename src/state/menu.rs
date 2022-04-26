@@ -8,17 +8,13 @@ use button::*;
 pub struct Menu;
 
 impl Plugin for Menu {
-    fn build(&self, app: &mut AppBuilder) {
+    fn build(&self, app: &mut App) {
         app.init_resource::<ButtonMaterials>()
             .insert_resource(ClearColor(Color::rgb(1.0, 0.0, 1.0)))
-            .add_system_set(
-                SystemSet::on_enter(AppState::MainMenu)
-                    .with_system(construct_initial_buttons.system()),
-            )
-            .add_system_set(
-                SystemSet::on_update(AppState::MainMenu).with_system(button_system.system()),
-            )
-            .add_system_set(SystemSet::on_exit(AppState::MainMenu));
+        .add_system_set( SystemSet::on_enter(AppState::MainMenu))//.with_system(construct_initial_buttons))
+        // .add_system_set(SystemSet::on_update(AppState::MainMenu).with_system(button_system))
+        // .add_system_set(SystemSet::on_exit(AppState::MainMenu));
+        ;
     }
 }
 
@@ -31,6 +27,7 @@ pub enum MenuSubActions {
     Back,
 }
 
+#[derive(Component)]
 pub struct ButtonFuncs {
     target: MenuSubActions,
 }
@@ -42,9 +39,13 @@ fn construct_initial_buttons(
     asset_server: Res<AssetServer>,
 ) {
     commands.spawn_bundle(SpriteBundle {
-        material: materials.add(Color::rgb(0.5, 0.5, 0.0).into()),
+        // texture: materials.add(Color::rgb(0.5, 0.5, 0.0).into()),
         transform: Transform::from_xyz(0.0, 0.0, 0.0),
-        sprite: Sprite::new(Vec2::new(12.0, 5.0)),
+        sprite: Sprite {
+            custom_size: Some(Vec2::new(12.0, 5.0)),
+            color: Color::rgb(0.5, 0.5, 0.0),
+            ..Default::default()
+        },
         ..Default::default()
     });
 
@@ -81,7 +82,7 @@ fn construct_initial_buttons(
                     align_items: AlignItems::Center,
                     ..Default::default()
                 },
-                material: button_materials.normal.clone(),
+                // texture: button_materials.normal.clone(),
                 transform: position,
                 ..Default::default()
             })

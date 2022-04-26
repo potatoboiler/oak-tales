@@ -1,12 +1,16 @@
 use bevy::prelude::*;
+use bevy::window::PresentMode;
 
 mod state;
 use state::StateHandler;
+
+use std::env;
 fn main() {
-    App::build()
+    env::set_var("RUST_BACKTRACE", "1");
+    App::new()
         .insert_resource(WindowDescriptor {
             title: "MapleS2ory".to_string(),
-            vsync: true,
+            present_mode: PresentMode::Fifo,
             ..Default::default()
         })
         .add_plugins(DefaultPlugins)

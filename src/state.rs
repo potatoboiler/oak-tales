@@ -13,8 +13,8 @@ pub enum AppState {
 pub struct StateHandler;
 // need a stack here
 impl Plugin for StateHandler {
-    fn build(&self, app: &mut AppBuilder) {
-        app.add_system(init_cameras.system())
+    fn build(&self, app: &mut App) {
+        app.add_system(init_cameras)
             .add_state(AppState::MainMenu)
             .add_plugin(menu::Menu);
     }
