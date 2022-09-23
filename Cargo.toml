@@ -9,7 +9,7 @@ edition = "2021"
 resolver = "2"
 
 [dependencies]
-bevy = { version = "0.7" }
+bevy = { version = "0.8" }
 bevy_rapier2d = "*"
 
 [profile.dev.package.bevy_rapier2d]
