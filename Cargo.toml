@@ -11,6 +11,9 @@ resolver = "2"
 [dependencies]
 bevy = { version = "0.8" }
 bevy_rapier2d = "*"
+bevy_ecs_ldtk = "*"
+
+log = "*"
 
 [profile.dev.package.bevy_rapier2d]
 opt-level = 3
