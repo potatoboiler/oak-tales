@@ -9,7 +9,7 @@ edition = "2021"
 resolver = "2"
 
 [dependencies]
-bevy = { version = "0.8" }
+bevy = { version = "0.10" }
 bevy_rapier2d = "*"
 bevy_ecs_ldtk = "*"
 
